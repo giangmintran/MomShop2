@@ -1,0 +1,119 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="grid p-fluid {{ isLoadingPage ? 'b-loading' : '' }}">
+    <div class="col-12 md:col-12">
+        <h6 class="mb-0"> 
+            Thông tin sản phẩm
+            <span (click)="collapse()" *ngIf="product.id" class="mb-0" style="padding: 0 10px; cursor: pointer;"> 
+                <i class="pi pi-angle-double-{{ isCollapse ? 'down' : 'up' }}" style="font-weight: bold; color: #5346E0; -webkit-transform:scale(1.5,1.2);"></i> 
+            </span>
+        </h6>
+        <hr class="p-0 mb-0">
+    </div>
+    <ng-container *ngIf="!isCollapse">
+        <div class="col-12">
+            <div class="field mb-1">
+                <label htmlFor="name">Tên sản phẩm<span class="required-field"> * </span> </label>
+                <input 
+                    [(ngModel)]="product.name" type="text" id="name" name="name" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="field mb-1">
+                <label htmlFor="price">Giá bán<span class="required-field"> * </span> </label>
+                <input 
+                    [(ngModel)]="product.price" type="number" id="price" name="price" pInputText
+                />
+            </div>
+        </div>
+    
+        <div class="col-12 md:col-6">
+            <div class="field mb-1">
+                <label htmlFor="productType">Loại sản phẩm<span class="required-field"> * </span> </label>
+                <p-dropdown 
+                    appendTo="body" optionValue="code" name="productType" optionLabel="name"
+                    [(ngModel)]="product.productType" [options]="types">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="field mb-1">
+                <label htmlFor="status">Trạng thái<span class="required-field"> * </span> </label>
+                <p-dropdown 
+                    appendTo="body" optionValue="code" name="status" optionLabel="name"
+                    [(ngModel)]="product.status" [options]="statuses">
+                </p-dropdown>
+            </div>
+        </div>
+    
+        <div class="col-12 md:col-12">
+            <div class="field mb-1">
+                <label htmlFor="description">Mô tả</label>
+                <textarea pInputTextarea [(ngModel)]="product.description" placeholder="Nhập nội dung mô tả"></textarea>
+            </div>
+        </div>
+    </ng-container>
+    <!--  -->
+    <div class="col-12 md;col-12" *ngIf="product.id">
+        <p-tabView styleClass="custom-tabview form-popup" [activeIndex]="activeIndex">
+            <p-tabPanel header="Thông tin chi tiết">
+                <div class="col-12 md:col-12">
+                    <p-table #policyDetailTempalteTable [value]="product.productDetails" dataKey="fakeId" [scrollable]="true"
+                        styleClass="custom-table-border-none" isLoading="isLoading" scrollHeight="40vh">
+                        <ng-template pTemplate="caption">
+                            <div class="flex flex-row-reverse flex-wrap">
+                                <div class="">
+                                    <button pButton pRipple
+                                        label="Thêm" icon="pi pi-plus" class="p-button-success mr-2"
+                                        (click)="createProductDetail()"></button>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 3rem; max-width: 3rem;">#ID</th>
+                                <th style="min-width: 12rem; max-width: 12rem;">Size</th>
+                                <th style="min-width: 12rem; max-width: 12rem;">Số lượng</th>
+                                <th style="min-width: 12rem;">Mô tả</th>
+                                <th style="min-width: 7rem; max-width: 7rem; justify-content: center;"> Thao tác </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-productDetail let-index="rowIndex">
+                            <tr>
+                                <td style="min-width: 3rem; max-width: 3rem;">{{ productDetail.id }}</td>
+                                <td style="min-width: 12rem; max-width: 12rem;">{{ productDetail.size }}</td>
+
+                                <td style="min-width: 12rem; max-width: 12rem;">
+                                    {{ productDetail.quantity }}
+                                </td>
+                                <td style="min-width: 6rem;" >{{ productDetail.description }}</td>
+
+                                <td style="min-width: 7rem; max-width: 7rem; justify-content: center;">
+                                    <div class="flex">
+                                        <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                        <p-menu #menu [popup]="true" class="button-actions" [model]="listActionPolicyDetail[index]"
+                                            appendTo="body">
+                                        </p-menu>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-tabPanel>
+
+            
+        </p-tabView>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+        (click)="close()"></button>
+    <button pButton pRipple [label]="product.id ? 'Lưu' : 'Save'" icon="pi pi-check"
+        class="p-button-text p-confirm-dialog-approve"  (click)="save()"></button>
+</div>

@@ -1,0 +1,37 @@
+
+<div class="grid p-fluid">
+    <ng-container>
+        <div class="col-12">
+            <div class="field mb-0">
+                <label htmlFor="size">Size<span class="required-field"> * </span></label>
+                <input
+                    [(ngModel)]="productDetail.size" type="text" id="size" name="size" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="field mb-0">
+                <label htmlFor="quantity"> Số lượng <span class="required-field"> * </span></label>
+                <p-inputNumber 
+                    id="quantity" [(ngModel)]="productDetail.quantity">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="field mb-0">
+                <label htmlFor="description">Description<span class="required-field"> * </span>
+                </label>
+                <input 
+                    type="text" id="description" name="description" pInputText
+                    [(ngModel)]="productDetail.description"
+                />
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" (click)="save()"></button>
+</div>
+
+         

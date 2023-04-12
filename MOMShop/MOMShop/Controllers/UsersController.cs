@@ -1,0 +1,143 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MOMShop.Domain.Interfaces;
+using MOMShop.Dto.Users;
+using MOMShop.Utils;
+using System;
+
+namespace MOMShop.Controllers
+{
+    [ApiController]
+    [Route("api/users")]
+    // [EnableCors("MyCors")]
+    public class UsersController : BaseController
+    {
+        private readonly IUsersServices _usersServices;
+
+        public UsersController(IUsersServices usersServices) : base()
+        {
+            _usersServices = usersServices;
+        }
+
+        /// <summary>
+        /// Tìm kiếm thông tin tài khoản theo username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        //[Authorize]
+        //[HttpGet("find-by-username")]
+        //public IActionResult FindByUsername(string username)
+        //{
+        //    try
+        //    {
+        //        var result = _usersServices.FindByUsername(username);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ReturnException(ex);
+        //    }
+        //}
+
+        //[Authorize]
+        //[HttpGet("my-info")]
+        //public APIResponse MyInfo()
+        //{
+        //    try
+        //    {
+        //        var result = _usersServices.FindMyInfo();
+        //        return new APIResponse(result, 200, "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OkException(ex);
+        //    }
+        //}
+
+        //[Authorize]
+        //[HttpPut("auth-phone")]
+        //public APIResponse AuthOtpPhone(string otp)
+        //{
+        //    try
+        //    {
+        //        _usersServices.AuthOtpPhone(otp);
+        //        return new APIResponse(null, 200, "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OkException(ex);
+        //    }
+        //}
+
+        [HttpPost("add")]
+        public IActionResult Add([FromBody] CreateUsersDto input)
+        {
+            try
+            {
+                _usersServices.Create(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
+
+        //[HttpGet("auth-otp/{type}")]
+        //public APIResponse AuthOtp(int type)
+        //{
+        //    try
+        //    {
+        //        var result = _usersServices.AddOtp(type);
+        //        return new APIResponse(result, 200, "ok");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OkException(ex);
+        //    }
+        //}
+
+        //[Authorize]
+        //[HttpPost("add-info")]
+        //public APIResponse AddUserInfo([FromBody] CreateUserInfoDto input)
+        //{
+        //    try
+        //    {
+        //        _usersServices.CreateInfoUser(input);
+        //        return new APIResponse(null, 200, "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OkException(ex);
+        //    }
+        //}
+
+        [HttpPost("login")]
+        public LoginResultDto Login([FromBody] LoginDto input)
+        {
+            try
+            {
+                var result = _usersServices.Login(input);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        //[HttpPut("update-avatar")]
+        //public APIResponse UpdateAvatar([FromBody] UpdateAvatarDto input)
+        //{
+        //    try
+        //    {
+        //        var result = _usersServices.UpdateAvatar(input);
+        //        return new APIResponse(result, 200, "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return OkException(ex);
+        //    }
+        //}
+    }
+}
