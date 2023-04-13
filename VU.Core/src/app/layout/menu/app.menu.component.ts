@@ -79,23 +79,9 @@ export class AppMenuComponent extends AppComponentBase {
             // {label: 'Table Demo', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table']},   
             {
                 label: 'Quản lý sản phẩm', icon: 'pi pi-box', routerLink: ['/product'], isShow: true,
-                // items: [
-                //     { label: 'Tin tức', icon: '', routerLink: ['broadcast/broadcast-news'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_TinTuc) },
-                //     { label: 'Hình ảnh', icon: '', routerLink: ['broadcast/broadcast-media'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_HinhAnh) },
-                //     { label: 'Kiến thức đầu tư', icon: '', routerLink: ['broadcast/knowledge-base'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_KienThucDauTu) },
-                //     // Hòm thư góp ý chưa xử lý nên comment lại
-                //     // { label: 'Hòm thư góp ý', icon: '', routerLink: ['broadcast/broadcast-news'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_HomThuGopY) }
-                // ]
             },
             {
-                label: 'Thông báo', icon: 'pi pi-comment', routerLink: ['/notification'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_ThongBao),
-                items: [
-                    { label: 'Thông báo mặc định', icon: '', routerLink: ['/notification/default-system-notification-config'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_ThongBaoMacDinh) },
-                    // { label: 'Cấu hình thông báo hệ thống', icon: '', routerLink: ['/notification/system-notification-config'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_CauHinhThongBaoHeThong) },
-                    { label: 'Mẫu thông báo', icon: '', routerLink: ['/notification/notification-template'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_MauThongBao) },
-                    { label: 'Quản lý thông báo', icon: '', routerLink: ['/notification/notification-manager'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_QLTB) },
-                    // { label: 'Cấu hình nhà cung cấp', icon: '', routerLink: ['/notification/provider-config'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_CauHinhNCC) }
-                ]
+                label: 'Quản lý hóa đơn nhập', icon: 'pi pi-file', routerLink: ['/receive-order'], isShow: true,
             },
             {
                 label: 'Thiết lập', icon: 'pi pi-th-large', routerLink: ['/establish'], isShow: this.isPermission(PermissionCoreConst.CoreMenu_ThongBao),

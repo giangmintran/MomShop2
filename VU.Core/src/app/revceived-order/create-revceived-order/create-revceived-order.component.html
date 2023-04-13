@@ -1,0 +1,133 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="grid p-fluid {{ isLoadingPage ? 'b-loading' : '' }}">
+    <ng-container>
+        <div class="col-12">
+            <div class="field mb-1">
+                <label htmlFor="code">Mã hóa đơn<span class="required-field"> * </span> </label>
+                <input 
+                    [(ngModel)]="receivedOrder.code" type="text" id="code" name="code" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label htmlFor="createdDate">Ngày tạo hóa đơn <span class="required-field"> * </span> </label>
+                <p-calendar inputId="createdDate" dateFormat="dd/mm/yy" locale="vi" 
+                    appendTo="body" utc="true" 
+                    [(ngModel)]="receivedOrder.createdDate" 
+            
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label htmlFor="receivedDate">Ngày nhận hàng<span class="required-field"> * </span> </label>
+                <p-calendar inputId="receivedDate" dateFormat="dd/mm/yy" locale="vi" 
+                    appendTo="body" utc="true" 
+                    [(ngModel)]="receivedOrder.receivedDate" 
+           
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="field mb-1">
+                <label htmlFor="receiver">Người nhận hàng<span class="required-field"> * </span> </label>
+                <input 
+                    [(ngModel)]="receivedOrder.receiver" type="text" id="receiver" name="receiver" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="field mb-1">
+                <label htmlFor="status">Trạng thái<span class="required-field"> * </span> </label>
+                <p-dropdown 
+                    appendTo="body" optionValue="code" name="status" optionLabel="name"
+                    [(ngModel)]="receivedOrder.status" [options]="statuses">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="field mb-1">
+                <label htmlFor="supplier">Đơn vị sản xuất<span class="required-field"> * </span> </label>
+                <input 
+                    [(ngModel)]="receivedOrder.supplier" type="text" id="supplier" name="supplier" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="field mb-1">
+                <label htmlFor="description">Ghi Chú</label>
+                <input 
+                    [(ngModel)]="receivedOrder.description" type="text" id="description" name="description" pInputText maxlength="256" 
+                />
+            </div>
+        </div>
+    </ng-container>
+    <!--  -->
+    <div class="col-12 md;col-12" *ngIf="receivedOrder.id">
+        <p-tabView styleClass="custom-tabview form-popup" [activeIndex]="activeIndex">
+            <p-tabPanel header="Thông tin chi tiết">
+                <div class="col-12 md:col-12">
+                    <p-table #policyDetailTempalteTable [value]="product?.productDetails" dataKey="fakeId" [scrollable]="true"
+                        styleClass="custom-table-border-none" isLoading="isLoading" scrollHeight="40vh">
+                        <ng-template pTemplate="caption">
+                            <div class="flex flex-row-reverse flex-wrap">
+                                <div class="">
+                                    <button pButton pRipple
+                                        label="Thêm" icon="pi pi-plus" class="p-button-success mr-2"
+                                        (click)="createProductDetail()"></button>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 3rem; max-width: 3rem;">#ID</th>
+                                <th style="min-width: 12rem; max-width: 12rem;">Size</th>
+                                <th style="min-width: 12rem; max-width: 12rem;">Số lượng</th>
+                                <th style="min-width: 12rem;">Mô tả</th>
+                                <th style="min-width: 7rem; max-width: 7rem; justify-content: center;"> Thao tác </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-productDetail let-index="rowIndex">
+                            <tr>
+                                <td style="min-width: 3rem; max-width: 3rem;">{{ productDetail.id }}</td>
+                                <td style="min-width: 12rem; max-width: 12rem;">{{ productDetail.size }}</td>
+
+                                <td style="min-width: 12rem; max-width: 12rem;">
+                                    {{ productDetail.quantity }}
+                                </td>
+                                <td style="min-width: 6rem;" >{{ productDetail.description }}</td>
+
+                                <td style="min-width: 7rem; max-width: 7rem; justify-content: center;">
+                                    <div class="flex">
+                                        <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                        <p-menu #menu [popup]="true" class="button-actions" [model]="listActionPolicyDetail[index]"
+                                            appendTo="body">
+                                        </p-menu>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-tabPanel>
+
+            
+        </p-tabView>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+        (click)="close()"></button>
+    <button pButton pRipple [label]="receivedOrder.id ? 'Lưu' : 'Save'" icon="pi pi-check"
+        class="p-button-text p-confirm-dialog-approve"  (click)="save()"></button>
+</div>

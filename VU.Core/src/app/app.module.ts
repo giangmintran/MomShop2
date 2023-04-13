@@ -85,7 +85,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
-import {MenuItem} from 'primeng/api';
+import {ConfirmationService, MenuItem} from 'primeng/api';
 
 // Application Components
 import { AppComponent } from './app.component';
@@ -108,7 +108,6 @@ import { InputDemoComponent } from './demo/view/inputdemo.component';
 import { ButtonDemoComponent } from './demo/view/buttondemo.component';
 import { TableDemoComponent } from './demo/view/tabledemo.component';
 import { ListDemoComponent } from './demo/view/listdemo.component';
-import { TreeDemoComponent } from './demo/view/treedemo.component';
 import { PanelsDemoComponent } from './demo/view/panelsdemo.component';
 import { OverlaysDemoComponent } from './demo/view/overlaysdemo.component';
 import { MediaDemoComponent } from './demo/view/mediademo.component';
@@ -160,13 +159,15 @@ import { ManagementReportComponent } from './export-report/management-report/man
 import { BusinessReportComponent } from './export-report/business-report/business-report.component';
 import { DateMaskDirective } from './date-mask.directive';
 import { SystemReportComponent } from './export-report/system-report/system-report.component';
-import { FilterBusinessCustomerComponent } from './components/filter-business-customer/filter-business-customer.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
 import { CreateProductComponent } from './product-management/create-product/create-product.component';
 import { DistributionService } from '@shared/services/distribution.service';
 import { CreateProductDetailComponent } from './product-management/create-product/create-product-detail/create-product-detail.component';
 import { FormSetDisplayColumnComponent } from './form-set-display-column/form-set-display-column.component';
 import { FormNotificationComponent } from './form-notification/form-notification.component';
+import { RevceivedOrderComponent } from './revceived-order/revceived-order.component';
+import { ReceiveOrderService } from '@shared/service-proxies/receiver-order-service';
+import { CreateRevceivedOrderComponent } from './revceived-order/create-revceived-order/create-revceived-order.component';
 
 
 FullCalendarModule.registerPlugins([
@@ -288,12 +289,10 @@ FullCalendarModule.registerPlugins([
         ButtonDemoComponent,
         TableDemoComponent,
         ListDemoComponent,
-        TreeDemoComponent,
         PanelsDemoComponent,
         OverlaysDemoComponent,
         MediaDemoComponent,
         MenusComponent,
-        MessagesDemoComponent,
         MessagesDemoComponent,
         MiscDemoComponent,
         ChartsDemoComponent,
@@ -308,12 +307,13 @@ FullCalendarModule.registerPlugins([
         BusinessReportComponent,
         SystemReportComponent,
         DateMaskDirective,
-        FilterBusinessCustomerComponent,
         ProductManagementComponent,
         CreateProductComponent,
         CreateProductDetailComponent,
         FormSetDisplayColumnComponent,
-        FormNotificationComponent
+        FormNotificationComponent,
+        RevceivedOrderComponent,
+        CreateRevceivedOrderComponent
     ],
     entryComponents: [
         UploadImageComponent,
@@ -327,12 +327,14 @@ FullCalendarModule.registerPlugins([
         NodeService,
         PhotoService,
         ProductService,
+        ReceiveOrderService,
         MenuService,
         BreadcrumbService,
         ConfigService,
         OrderService,
         DialogService,
-        DistributionService
+        DistributionService,
+        ConfirmationService
     ],
     bootstrap: [AppComponent]
 })

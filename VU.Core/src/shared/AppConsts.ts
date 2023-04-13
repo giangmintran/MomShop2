@@ -3238,9 +3238,27 @@ export class InvestorConst {
         return fieldFilter ? fieldFilter[attribute] : null;
     }
 }
+export class ReceivedOrder{
+    public static ReceivedOrderStatus = [
+        {
+            name: 'Chưa thanh toán',
+            code: 1
+        },
+        {
+            name: 'Đã thành toán',
+            code: 2
+        },
+        
+    ]
 
+    public static getStatus(code){
+        const result = this.ReceivedOrderStatus.find(item => 
+            item.code == code
+        );
+        return result?.name ?? "";
+    }
+}
 export class MediaConst {
-
     public static mediaStatus = {
         ACTIVE: 'Đã đăng',
         PENDING: 'Trình duyệt',
@@ -3306,42 +3324,6 @@ export class MediaConst {
         DRAFT: 'secondary'
     }
     
-    public static newsTypes = {
-        1: 'Tin tức', //Tin tức thuần
-        2: 'Chia sẻ từ KOL', //Chia sẻ từ KOL
-        3: 'Ưu đãi' //Ưu đãi
-    }
-    //[ 'FINANCE', 'TRENDING', 'INVESTMENT' ]
-    public static knowledgeCategories = {
-        FINANCE: 'Tài chính cá nhân', //Tin tức thuần
-        TRENDING: 'Xu hướng', //Chia sẻ từ KOL
-        INVESTMENT: 'Đầu tư', //Ưu đãi,
-        CAM_NANG: 'Cẩm nang',
-        BAO_MAT: 'Bảo mật',
-        QUY_TRINH_XU_LY: 'Quy trình xử lý'
-    }
-
-    public static getStatusNews(code) {
-        return this.mediaStatus[code];
-    }
-
-    public static getStatusSeverity(code) {
-        return this.statusSeverity[code]
-    }
-
-    public static getNewsType(code) {
-        return this.newsTypes[code]
-
-    }
-
-    public static getKnowledgeBaseCategory(code) {
-        return this.knowledgeCategories[code]
-    }
-
-    public static ACTIVE = 'ACTIVE';
-    public static TRINH_DUYET = 'PENDING';
-    public static NHAP = 'DRAFT';
-
 }
 
 export class DepartmentConst {

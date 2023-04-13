@@ -11,6 +11,7 @@ import { OperationalReportComponent } from './export-report/operational-report/o
 import { BusinessReportComponent } from './export-report/business-report/business-report.component';
 import { SystemReportComponent } from './export-report/system-report/system-report.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
+import { RevceivedOrderComponent } from './revceived-order/revceived-order.component';
 
 @NgModule({
 	imports: [
@@ -117,6 +118,9 @@ import { ProductManagementComponent } from './product-management/product-managem
 					// },
 					{
 						path: "product", component: ProductManagementComponent
+					},
+					{
+						path: "receive-order", component: RevceivedOrderComponent
 					},
 					{
 						path: "notification",

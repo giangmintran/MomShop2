@@ -18,7 +18,6 @@ import { LoadingPageComponent } from './components/validation/loadingPage/loadin
 import { FormatCurrencyPipe } from './pipes/formatCurrency.pipe';
 import { BaseApiUrlPipe } from './pipes/baseApiUrl.pipe';
 import { SexNamPipe } from './pipes/sexName.pipe';
-import { InvestorServiceProxy } from './service-proxies/investor-service';
 import { SafePipe } from './pipes/safe.pipe';
 import { ExportReportService } from './services/export-report.service';
 import { GeneralService } from './services/general-service';
@@ -67,7 +66,6 @@ export class SharedModule {
                 PermissionsService,
 				// AppLocalStorageService,
                 MessageService,
-				InvestorServiceProxy,
                 ExportReportService,
                 GeneralService,
             ]

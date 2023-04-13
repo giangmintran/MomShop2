@@ -1,38 +1,39 @@
-import { Component, Injector, Input, OnInit } from "@angular/core";
-import { ActiveDeactiveConst, AppConsts, FormNotificationConst, MediaConst, PolicyDetailTemplateConst, PolicyTempConst, ProductPolicyConst, SearchConst, YesNoConst, } from "@shared/AppConsts";
-import { CrudComponentBase } from "@shared/crud-component-base";
-import { PageBondPolicyTemplate } from "@shared/model/pageBondPolicyTemplate";
-import { DistributionService } from "@shared/services/distribution.service";
-import { ConfirmationService, MessageService } from "primeng/api";
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
-import { debounceTime } from "rxjs/operators";
-import { BreadcrumbService } from "../layout/breadcrumb/breadcrumb.service";
-import { CreateProductComponent } from "./create-product/create-product.component";
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { ActiveDeactiveConst, PolicyTempConst, PolicyDetailTemplateConst, YesNoConst, MediaConst, FormNotificationConst, AppConsts, ReceivedOrder } from '@shared/AppConsts';
+import { CrudComponentBase } from '@shared/crud-component-base';
 import { Page } from '@shared/model/page';
-import { ProductService } from "@shared/service-proxies/product-service";
-import { FormSetDisplayColumnComponent } from "../form-set-display-column/form-set-display-column.component";
-import { FormNotificationComponent } from "../form-notification/form-notification.component";
+import { DistributionService } from '@shared/services/distribution.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { FormNotificationComponent } from '../form-notification/form-notification.component';
+import { FormSetDisplayColumnComponent } from '../form-set-display-column/form-set-display-column.component';
+import { BreadcrumbService } from '../layout/breadcrumb/breadcrumb.service';
+import { CreateProductComponent } from '../product-management/create-product/create-product.component';
+import { ProductService } from '@shared/service-proxies/product-service';
+import { ReceiveOrderService } from '@shared/service-proxies/receiver-order-service';
+import { CreateRevceivedOrderComponent } from './create-revceived-order/create-revceived-order.component';
 
 @Component({
-  selector: 'app-product-management',
-  templateUrl: './product-management.component.html',
-  styleUrls: ['./product-management.component.scss'],
+  selector: 'app-revceived-order',
+  templateUrl: './revceived-order.component.html',
+  styleUrls: ['./revceived-order.component.scss']
 })
-export class ProductManagementComponent extends CrudComponentBase {
+export class RevceivedOrderComponent extends CrudComponentBase implements OnInit {
+
   constructor(
     injector: Injector,
     messageService: MessageService,
     private dialogService: DialogService,
     private breadcrumbService: BreadcrumbService,
-    private _distributionService: DistributionService,
     private productService: ProductService,
+    private receiveOrderService: ReceiveOrderService,
     public confirmationService: ConfirmationService,
 
   ) {
     super(injector, messageService);
     this.breadcrumbService.setItems([
       { label: "Trang chủ", routerLink: ["/home"] },
-      { label: "Quản lý sản phẩm" },
+      { label: "Quản lý hóa đơn nhập" },
     ]);
   }
 
@@ -44,6 +45,7 @@ export class ProductManagementComponent extends CrudComponentBase {
   PolicyDetailTemplateConst = PolicyDetailTemplateConst;
   YesNoConst = YesNoConst;
   MediaConst = MediaConst;
+  ReceivedOrder = ReceivedOrder;
 
   row: any;
   col: any;
@@ -63,21 +65,14 @@ export class ProductManagementComponent extends CrudComponentBase {
 
   ngOnInit(): void {
     this.setPage({ page: this.offset });
-    // this.subject.keyword.pipe(debounceTime(SearchConst.DEBOUNCE_TIME)).subscribe(() => {
-    //   if (this.keyword === "") {
-    //     this.setPage({ page: this.offset });
-    //   } else {
-    //     this.setPage();
-    //   }
-    // });
 
     // Xử lý ẩn hiện cột trong bảng
     this.cols = [
-      { field: 'code', header: 'Code', width: '12rem' },
-      { field: 'name', header: 'Name', width: '16rem' },
-      { field: 'price', header: 'Price', width: '12rem' },
-      { field: 'productTypeName', header: 'ProductType', width: '15rem'},
-      { field: 'description', header: 'Description', width: '45rem'}
+      { field: 'code', header: 'Code', width: '8rem' },
+      { field: 'createdDateDisplay', header: 'CreatedDate', width: '12rem' },
+      { field: 'receivedDateDisplay', header: 'ReceivedDate', width: '12rem' },
+      { field: 'supplier', header: 'Supplier', width: '34rem'},
+      { field: 'description', header: 'Description', width: '34rem'}
     ];
 
     this.cols = this.cols.map((item, index) => {
@@ -105,8 +100,8 @@ export class ProductManagementComponent extends CrudComponentBase {
 
   showData(rows) {
     for (let row of rows) {
-      row.code = row.code,
-      row.productTypeName = MediaConst.getProductType(row.productType);
+      row.createdDateDisplay = this.formatDate(row.createdDate);
+      row.receivedDateDisplay = this.formatDate(row.receivedDate);
     }
   }
 
@@ -137,8 +132,8 @@ export class ProductManagementComponent extends CrudComponentBase {
   }
 
   create() {
-    const ref = this.dialogService.open(CreateProductComponent, {
-      header: "Thêm sản phẩm",
+    const ref = this.dialogService.open(CreateRevceivedOrderComponent, {
+      header: "Thêm hóa đơn nhập",
       width: '1000px',
       contentStyle: { "max-height": "600px", overflow: "auto", "margin-bottom": "60px", },
       baseZIndex: 10000,
@@ -151,14 +146,15 @@ export class ProductManagementComponent extends CrudComponentBase {
     });
   }
 
-  edit(product, isCreateDetail?: boolean) {
-    const ref = this.dialogService.open(CreateProductComponent, {
+  edit(receiveOrder, isCreateDetail?: boolean) {
+    const ref = this.dialogService.open(CreateRevceivedOrderComponent, {
       header: "Cập nhật thông tin",
       width: "1000px",
       contentStyle: { "max-height": "600px", overflow: "auto", "margin-bottom": "60px", },
       baseZIndex: 10000,
       data: {
-        productId: product.id,
+        receiveOrderId: receiveOrder.id,
+        receiveOrder: receiveOrder
       },
     });
     //
@@ -201,21 +197,6 @@ export class ProductManagementComponent extends CrudComponentBase {
     });
   }
 
-  changeStatusPolicy(policy) {
-    this._distributionService.changeStatusPolicy(policy.id).subscribe(
-      (response) => {
-        let message = "Kích hoạt thành công";
-        if (policy.status == "A") message = "Hủy kích hoạt thành công";
-        if (this.handleResponseInterceptor(response, message)) {
-          this.setPage({ page: this.page.pageNumber });
-        }
-      },(err) => {
-        console.log("err----", err);
-        this.messageError(AppConsts.messageError);
-      }
-    );
-  }
-
   changeStatus(){
     this.setPage({ Page: this.offset })
   }
@@ -233,7 +214,7 @@ export class ProductManagementComponent extends CrudComponentBase {
     this.page.pageNumber = pageInfo?.page ?? this.offset;
     this.page.keyword = this.keyword;
     this.isLoading = true;
-    this.productService.getAll(this.page, this.status).subscribe((res) => {
+    this.receiveOrderService.getAll(this.page, this.status).subscribe((res) => {
         this.isLoading = false;
         if (this.handleResponseInterceptor(res, "")) {
           this.rows = res?.data.items;
@@ -246,4 +227,5 @@ export class ProductManagementComponent extends CrudComponentBase {
         console.log('Error-------', err);
       });
     }
+
 }

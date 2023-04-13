@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
-import { ContractTemplateServiceProxy } from '@shared/service-proxies/bond-manager-service';
 import { FileServiceProxy } from '@shared/service-proxies/file-service';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -19,7 +18,6 @@ export class UploadImageComponent implements OnInit {
   isUploading: boolean = false;
   AppConsts = AppConsts;
   constructor(
-    private _contractTemplateService: ContractTemplateServiceProxy,
     private messageService: MessageService,
     public ref: DynamicDialogRef, 
     public config: DynamicDialogConfig
@@ -36,7 +34,6 @@ export class UploadImageComponent implements OnInit {
       let uploadFilesProcess  = []
       event.files.forEach(file => {
         console.log("123456yui1422356", file);
-        uploadFilesProcess.push(this._contractTemplateService.uploadFileGetUrl(file, "media"))
       });
       //
       forkJoin(uploadFilesProcess).subscribe(results => {
